@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axis 3D - Taller de Impresión 3D</title>
+    <style>
+        /* Reseteo básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Variables de color */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        /* Estilo global para imágenes - este es el cambio principal */
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Hero section */
+        .hero {
+            height: 85vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Imagenes/red-benchy-boat-1.jpg.webp') no-repeat center center/cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            background-size: cover;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Secciones */
+        .section {
+            padding: 5rem 10%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 0.5rem auto;
+        }
+
+        /* Productos destacados */
+        .products {
+            background-color: white;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-image {
+            height: 250px;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Para asegurar que la imagen no se salga */
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            color: #777;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Servicios */
+        .services {
+            background-color: var(--light-color);
+        }
+
+        .service-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .service-card {
+            flex: 1 1 300px;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Sobre nosotros */
+        .about {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .about-content h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 100%;
+            max-height: 400px; /* Altura máxima para mantener proporción */
+        }
+
+        /* Galería */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            height: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Contacto */
+        .contact {
+            background-color: var(--light-color);
+        }
+
+        .contact-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .contact-form {
+            flex: 1 1 500px;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-info {
+            flex: 1 1 300px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .contact-icon {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 10%;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #bbb;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            text-align: center;
+            color: #bbb;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Espacio entre la imagen y el texto */
+        }
+
+        .logo img {
+            height: 40px; /* Ajusta según el tamaño de tu logo */
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+        }
+
+        .logo-axis {
+            color: var(--primary-color); /* El azul que ya tienes definido */
+        }
+
+        .logo-3d {
+            color: var(--secondary-color); /* El color negro que ya tienes definido */
+        }
+        /* Media queries */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .nav-links {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+            .nav-links li {
+                margin: 0;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .section {
+                padding: 3rem 5%;
+            }
+            .hero-buttons {
+                flex-direction: column;
+            }
+            .hero {
+                height: auto;
+                min-height: 70vh;
+                padding: 3rem 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="Imagenes/Logo.png" alt="Logo">
+            <div class="logo-text">
+                <span class="logo-axis">Axis</span><span class="logo-3d">3D</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#productos">Productos</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#" class="cta-button">Comprar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <h1>Bienvenidos a Axis 3D</h1>
+        <p>Tu taller especializado en impresión 3D de muñecos Dummie 13 y servicios de impresión personalizados de alta calidad</p>
+        <div class="hero-buttons">
+            <a href="#productos" class="cta-button">Ver Productos</a>
+            <a href="#servicios" class="cta-button" style="background-color: white; color: var(--primary-color);">Nuestros Servicios</a>
+        </div>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section class="section products" id="productos">
+        <h2 class="section-title">Nuestros Productos Destacados</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="Imagenes/premi.png" alt="Muñeco Dummie 13 Premium">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Dummie 13 Premium</h3>
+                    <p class="product-desc">Muñeco de prueba de impacto con acabado profesional y articulaciones mejoradas.</p>
+                    <p class="product-price">$70 MXN</p>
+                    <a href="#" class="cta-button">Comprar Ahora</a>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="Imagenes/13.png" alt="Dummie 13 Articulado">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Dummie 13 Articulado</h3>
+                    <p class="product-desc">Versión articulada especial para pruebas de movimiento y simulaciones avanzadas.</p>
+                    <p class="product-price">$50 MXN</p>
+                    <a href="#" class="cta-button">Comprar Ahora</a>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="Imagenes/minis.png" alt="Dummie 13 Mini">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Dummie 13 Mini</h3>
+                    <p class="product-desc">Versión compacta ideal para pruebas a escala o coleccionistas.</p>
+                    <p class="product-price">$40 MXN</p>
+                    <a href="#" class="cta-button">Comprar Ahora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section class="section services" id="servicios">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="service-flex">
+            <div class="service-card">
+                <div class="service-icon">🖨️</div>
+                <h3>Impresión 3D Personalizada</h3>
+                <p>Ofrecemos servicios de impresión 3D de alta precisión con diferentes materiales según tus necesidades.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">✏️</div>
+                <h3>Diseño 3D</h3>
+                <p>Creamos modelos 3D personalizados según tus especificaciones o corregimos tus archivos para optimizar la impresión.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔧</div>
+                <h3>Mantenimiento de Impresoras</h3>
+                <p>Reparación y mantenimiento de impresoras 3D de todas las marcas para garantizar su funcionamiento óptimo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section class="section" id="nosotros">
+        <h2 class="section-title">Sobre Nosotros</h2>
+        <div class="about">
+            <div class="about-content">
+                <h2>Expertos en Impresión 3D</h2>
+                <p>En Axis 3D nos especializamos en la fabricación de muñecos Dummie 13 para pruebas de impacto y simulaciones, con la más alta calidad y precisión.</p>
+                <p>Contamos con más de 5 años de experiencia en el sector de la impresión 3D, utilizando tecnología de vanguardia y materiales de primera calidad para garantizar productos duraderos y funcionales.</p>
+                <p>Nuestro equipo está formado por diseñadores e ingenieros apasionados por la innovación y la tecnología 3D, comprometidos a ofrecer soluciones personalizadas para cada cliente.</p>
+            </div>
+            <div class="about-image">
+                <img src="Imagenes/K2_plus_45.png" alt="Nuestro taller de impresión 3D">
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería -->
+    <section class="section">
+        <h2 class="section-title">Galería de Trabajos</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="Imagenes/450_1000.jpg" alt="Proyecto de impresión 3D">
+            </div>
+            <div class="gallery-item">
+                <img src="Imagenes/runner.webp" alt="Muñeco Dummie personalizado">
+            </div>
+            <div class="gallery-item">
+                <img src="Imagenes/images.jpg" alt="Impresora 3D en funcionamiento">
+            </div>
+            <div class="gallery-item">
+                <img src="Imagenes/descarga.jpg" alt="Diseño 3D en proceso">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="section contact" id="contacto">
+        <h2 class="section-title">Contáctanos</h2>
+        <div class="contact-flex">
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone">
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Enviar Mensaje</button>
+            </form>
+            <div class="contact-info">
+                <h3>Información de Contacto</h3>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <p>Av. Tecnológico #123, Col. Centro, Ciudad de México</p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <p>+52 55 1234 5678</p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <p>info@axis3d.com</p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <p>Lunes a Viernes: 9am - 6pm<br>Sábados: 10am - 2pm</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>Axis 3D</h3>
+                <p>Tu taller especializado en impresión 3D de muñecos Dummie 13 y servicios personalizados.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Productos</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Dummie 13 Premium</a></li>
+                    <li><a href="#">Dummie 13 Articulado</a></li>
+                    <li><a href="#">Dummie 13 Mini</a></li>
+                    <li><a href="#">Accesorios</a></li>
+                    <li><a href="#">Materiales de Impresión</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Síguenos</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Axis 3D - Todos los derechos reservados</p>
+        </div>
+    </footer>
+</body>
+</html>
